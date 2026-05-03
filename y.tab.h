@@ -71,7 +71,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 14 "polinom.y"
+#line 15 "polinom.y"
  int ival; int array[10];
 
 #line 78 "y.tab.h"
