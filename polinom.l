@@ -1,23 +1,21 @@
 %{
-    #include <stdio.h>
-    #include <stdlib.h>
     #include "y.tab.h"
+    #include <stdlib.h>
+    #include <stdio.h>
 %}
 
 %%
 
-"value"     { return VALUE; }
-[0-9]+      { yylval.ival = atoi(yytext); return NUMBER; }
-"Y"         { return VAR; }
+[0-9]+          { yylval.ival = atoi(yytext); return NUMBER; }
 
-"\n"        { return '\n'; }
-"["         { return '['; }
-"]"         { return ']'; }
-","         { return ','; }
-"'"         { return '\''; }
+X               { return VARX; }
+Y               { return VARY; }
 
-[-+*^()]    { return yytext[0]; }
+value           { return VALUE; }
 
-[ \t\r]+    { /* ignore whitespace */ }
+[-+*^()\[\],\n] { return yytext[0]; }
+\'              { return yytext[0]; }
 
-.           { printf("Unknown character: %s\n", yytext); }
+[ \t]           ; /* ignore whitespace */
+
+.               { printf("Unknown character: %s\n", yytext); }

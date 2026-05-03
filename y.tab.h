@@ -55,7 +55,9 @@ extern int yydebug;
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
     NUMBER = 258,                  /* NUMBER  */
-    VAR = 259                      /* VAR  */
+    VARX = 259,                    /* VARX  */
+    VARY = 260,                    /* VARY  */
+    VALUE = 261                    /* VALUE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -65,16 +67,18 @@ extern int yydebug;
 #define YYerror 256
 #define YYUNDEF 257
 #define NUMBER 258
-#define VAR 259
+#define VARX 259
+#define VARY 260
+#define VALUE 261
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 15 "polinom.y"
- int ival; int array[10];
+#line 17 "polinom.y"
+ int ival; int array[10][10]; 
 
-#line 78 "y.tab.h"
+#line 82 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

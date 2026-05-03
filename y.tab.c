@@ -72,16 +72,18 @@
     #include <stdio.h>
     #include <stdlib.h>
 
-    //prototypes of the functions from user subrutines
-    void initialize_array(int arr[10]);
-    void add_arrays(int arr1[10], int arr2[10], int result[10]);
-    void subtract_arrays(int arr1[10], int arr2[10], int result[10]);
-    void print_array(int arr[10]);
+    // prototypes of the functions from user subrutines
+    void initialize_array(int arr[10][10]);
+    void add_arrays(int arr1[10][10], int arr2[10][10], int result[10][10]);
+    void subtract_arrays(int arr1[10][10], int arr2[10][10], int result[10][10]);
+    void print_array(int arr[10][10]);
     void yyerror(const char *s);
-    void multiply_arrays(int arr1[10], int arr2[10], int result[10]);
+    void multiply_arrays(int arr1[10][10], int arr2[10][10], int result[10][10]);
+    void derive_array(int arr[10][10], int result[10][10]);
+    int compute_value(int arr[10][10], int x);
     int yylex(void);
 
-#line 85 "y.tab.c"
+#line 87 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -126,7 +128,9 @@ extern int yydebug;
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
     NUMBER = 258,                  /* NUMBER  */
-    VAR = 259                      /* VAR  */
+    VARX = 259,                    /* VARX  */
+    VARY = 260,                    /* VARY  */
+    VALUE = 261                    /* VALUE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -136,16 +140,18 @@ extern int yydebug;
 #define YYerror 256
 #define YYUNDEF 257
 #define NUMBER 258
-#define VAR 259
+#define VARX 259
+#define VARY 260
+#define VALUE 261
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 15 "polinom.y"
- int ival; int array[10];
+#line 17 "polinom.y"
+ int ival; int array[10][10]; 
 
-#line 149 "y.tab.c"
+#line 155 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -173,14 +179,21 @@ enum yysymbol_kind_t
   YYSYMBOL_5_ = 5,                         /* '*'  */
   YYSYMBOL_6_ = 6,                         /* '^'  */
   YYSYMBOL_NUMBER = 7,                     /* NUMBER  */
-  YYSYMBOL_VAR = 8,                        /* VAR  */
-  YYSYMBOL_9_n_ = 9,                       /* '\n'  */
-  YYSYMBOL_10_ = 10,                       /* '('  */
-  YYSYMBOL_11_ = 11,                       /* ')'  */
-  YYSYMBOL_YYACCEPT = 12,                  /* $accept  */
-  YYSYMBOL_file = 13,                      /* file  */
-  YYSYMBOL_expr = 14,                      /* expr  */
-  YYSYMBOL_monom = 15                      /* monom  */
+  YYSYMBOL_VARX = 8,                       /* VARX  */
+  YYSYMBOL_VARY = 9,                       /* VARY  */
+  YYSYMBOL_VALUE = 10,                     /* VALUE  */
+  YYSYMBOL_11_n_ = 11,                     /* '\n'  */
+  YYSYMBOL_12_ = 12,                       /* '('  */
+  YYSYMBOL_13_ = 13,                       /* ')'  */
+  YYSYMBOL_14_ = 14,                       /* '\''  */
+  YYSYMBOL_15_ = 15,                       /* '['  */
+  YYSYMBOL_16_ = 16,                       /* ','  */
+  YYSYMBOL_17_ = 17,                       /* ']'  */
+  YYSYMBOL_YYACCEPT = 18,                  /* $accept  */
+  YYSYMBOL_file = 19,                      /* file  */
+  YYSYMBOL_expr = 20,                      /* expr  */
+  YYSYMBOL_expr_int = 21,                  /* expr_int  */
+  YYSYMBOL_monom = 22                      /* monom  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -508,19 +521,19 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   26
+#define YYLAST   37
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  12
+#define YYNTOKENS  18
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  4
+#define YYNNTS  5
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  15
+#define YYNRULES  18
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  24
+#define YYNSTATES  32
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   259
+#define YYMAXUTOK   261
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -535,18 +548,15 @@ union yyalloc
 static const yytype_int8 yytranslate[] =
 {
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       9,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+      11,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-      10,    11,     5,     3,     2,     4,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     6,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,    14,
+      12,    13,     5,     3,    16,     4,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,    15,     2,    17,     6,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -559,15 +569,19 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     1,     2,     7,     8
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     1,     2,     7,     8,
+       9,    10
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    26,    26,    27,    28,    29,    32,    33,    34,    35,
-      36,    39,    40,    41,    42,    43
+       0,    33,    33,    34,    35,    36,    37,    40,    41,    42,
+      43,    50,    51,    60,    63,    67,    71,    75,    79
 };
 #endif
 
@@ -584,8 +598,8 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "'+'", "'-'", "'*'",
-  "'^'", "NUMBER", "VAR", "'\\n'", "'('", "')'", "$accept", "file", "expr",
-  "monom", YY_NULLPTR
+  "'^'", "NUMBER", "VARX", "VARY", "VALUE", "'\\n'", "'('", "')'", "'\\''",
+  "'['", "','", "']'", "$accept", "file", "expr", "expr_int", "monom", YY_NULLPTR
 };
 
 static const char *
@@ -595,7 +609,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-7)
+#define YYPACT_NINF (-10)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -609,9 +623,10 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -7,     0,    -7,    -4,    -3,    -7,    14,    11,    -7,    -6,
-       6,     1,    14,    14,    14,    -7,    17,    -7,    -7,    20,
-      20,    -7,    19,    -7
+     -10,     7,   -10,   -10,     2,     3,    -9,   -10,    25,     0,
+      -1,   -10,     5,    17,    25,    18,    25,    25,    25,   -10,
+     -10,   -10,   -10,    -3,    11,    22,    22,   -10,    28,   -10,
+      19,   -10
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -619,21 +634,22 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       2,     0,     1,    15,    14,     4,     0,     0,    10,     0,
-       0,     0,     0,     0,     0,     3,    12,    13,     9,     6,
-       7,     8,     0,    11
+       2,     0,     1,    14,    15,    16,     0,     5,     0,     0,
+       0,    12,     0,     0,     0,     0,     0,     0,     0,     3,
+       4,    17,    18,     0,    10,     7,     8,     9,     0,    11,
+       0,    13
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -7,    -7,     5,    -7
+     -10,   -10,    12,   -10,   -10
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     1,     7,     8
+       0,     1,     9,    10,    11
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -641,39 +657,42 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       2,     9,    16,    10,    12,    13,    14,     3,     4,     5,
-       6,    11,    18,    17,    12,    13,    14,    19,    20,    21,
-      15,     3,     4,    22,     6,    14,    23
+      16,    17,    18,    16,    17,    18,    14,     2,    12,    13,
+      20,    19,    21,    28,     3,     4,     5,     6,     7,     8,
+      15,    16,    17,    18,    22,    29,    23,    18,    25,    26,
+      27,    24,     3,     4,     5,    30,    31,     8
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,     5,     8,     6,     3,     4,     5,     7,     8,     9,
-      10,     6,    11,     7,     3,     4,     5,    12,    13,    14,
-       9,     7,     8,     6,    10,     5,     7
+       3,     4,     5,     3,     4,     5,    15,     0,     6,     6,
+      11,    11,     7,    16,     7,     8,     9,    10,    11,    12,
+       8,     3,     4,     5,     7,    14,    14,     5,    16,    17,
+      18,    13,     7,     8,     9,     7,    17,    12
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    13,     0,     7,     8,     9,    10,    14,    15,     5,
-       6,    14,     3,     4,     5,     9,     8,     7,    11,    14,
-      14,    14,     6,     7
+       0,    19,     0,     7,     8,     9,    10,    11,    12,    20,
+      21,    22,     6,     6,    15,    20,     3,     4,     5,    11,
+      11,     7,     7,    20,    13,    20,    20,    20,    16,    14,
+       7,    17
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    12,    13,    13,    13,    13,    14,    14,    14,    14,
-      14,    15,    15,    15,    15,    15
+       0,    18,    19,    19,    19,    19,    19,    20,    20,    20,
+      20,    20,    20,    21,    22,    22,    22,    22,    22
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     0,     3,     2,     0,     3,     3,     3,     3,
-       1,     5,     3,     3,     1,     1
+       0,     2,     0,     3,     3,     2,     0,     3,     3,     3,
+       3,     4,     1,     6,     1,     1,     1,     3,     3
 };
 
 
@@ -1137,67 +1156,118 @@ yyreduce:
   switch (yyn)
     {
   case 3: /* file: file expr '\n'  */
-#line 27 "polinom.y"
-                 {print_array((yyvsp[-1].array));}
-#line 1143 "y.tab.c"
-    break;
-
-  case 6: /* expr: expr '+' expr  */
-#line 32 "polinom.y"
-                    {add_arrays((yyvsp[-2].array), (yyvsp[0].array), (yyval.array));}
-#line 1149 "y.tab.c"
-    break;
-
-  case 7: /* expr: expr '-' expr  */
-#line 33 "polinom.y"
-                {subtract_arrays((yyvsp[-2].array), (yyvsp[0].array), (yyval.array));}
-#line 1155 "y.tab.c"
-    break;
-
-  case 8: /* expr: expr '*' expr  */
 #line 34 "polinom.y"
-                {multiply_arrays((yyvsp[-2].array), (yyvsp[0].array), (yyval.array));}
-#line 1161 "y.tab.c"
+                 { print_array((yyvsp[-1].array)); }
+#line 1162 "y.tab.c"
     break;
 
-  case 9: /* expr: '(' expr ')'  */
+  case 4: /* file: file expr_int '\n'  */
 #line 35 "polinom.y"
-               {for(int i=0; i<10; i++) (yyval.array)[i]=(yyvsp[-1].array)[i];}
-#line 1167 "y.tab.c"
+                     { printf("%d\n", (yyvsp[-1].ival)); }
+#line 1168 "y.tab.c"
     break;
 
-  case 11: /* monom: NUMBER '*' VAR '^' NUMBER  */
-#line 39 "polinom.y"
-                                 {initialize_array((yyval.array)); (yyval.array)[(yyvsp[0].ival)]=(yyvsp[-4].ival);}
-#line 1173 "y.tab.c"
-    break;
-
-  case 12: /* monom: NUMBER '*' VAR  */
+  case 7: /* expr: expr '+' expr  */
 #line 40 "polinom.y"
-                 {initialize_array((yyval.array)); (yyval.array)[1]=(yyvsp[-2].ival);}
-#line 1179 "y.tab.c"
+                    { add_arrays((yyvsp[-2].array), (yyvsp[0].array), (yyval.array)); }
+#line 1174 "y.tab.c"
     break;
 
-  case 13: /* monom: VAR '^' NUMBER  */
+  case 8: /* expr: expr '-' expr  */
 #line 41 "polinom.y"
-                 {initialize_array((yyval.array)); (yyval.array)[(yyvsp[0].ival)]=1;}
-#line 1185 "y.tab.c"
+                { subtract_arrays((yyvsp[-2].array), (yyvsp[0].array), (yyval.array)); }
+#line 1180 "y.tab.c"
     break;
 
-  case 14: /* monom: VAR  */
+  case 9: /* expr: expr '*' expr  */
 #line 42 "polinom.y"
-      {initialize_array((yyval.array)); (yyval.array)[1]=1;}
-#line 1191 "y.tab.c"
+                { multiply_arrays((yyvsp[-2].array), (yyvsp[0].array), (yyval.array)); }
+#line 1186 "y.tab.c"
     break;
 
-  case 15: /* monom: NUMBER  */
+  case 10: /* expr: '(' expr ')'  */
 #line 43 "polinom.y"
-         {initialize_array((yyval.array)); (yyval.array)[0]=(yyvsp[0].ival);}
-#line 1197 "y.tab.c"
+               {
+        for(int i = 0; i < 10; i++) {
+            for(int j = 0; j < 10; j++) {
+                (yyval.array)[i][j] = (yyvsp[-1].array)[i][j];
+            }
+        }
+    }
+#line 1198 "y.tab.c"
+    break;
+
+  case 11: /* expr: '(' expr ')' '\''  */
+#line 50 "polinom.y"
+                    { derive_array((yyvsp[-2].array), (yyval.array)); }
+#line 1204 "y.tab.c"
+    break;
+
+  case 12: /* expr: monom  */
+#line 51 "polinom.y"
+        {
+        for(int i = 0; i < 10; i++) {
+            for(int j = 0; j < 10; j++) {
+                (yyval.array)[i][j] = (yyvsp[0].array)[i][j];
+            }
+        }
+    }
+#line 1216 "y.tab.c"
+    break;
+
+  case 13: /* expr_int: VALUE '[' expr ',' NUMBER ']'  */
+#line 60 "polinom.y"
+                                        { (yyval.ival) = compute_value((yyvsp[-3].array), (yyvsp[-1].ival)); }
+#line 1222 "y.tab.c"
+    break;
+
+  case 14: /* monom: NUMBER  */
+#line 63 "polinom.y"
+              {
+        initialize_array((yyval.array));
+        (yyval.array)[0][0] = (yyvsp[0].ival);
+    }
+#line 1231 "y.tab.c"
+    break;
+
+  case 15: /* monom: VARX  */
+#line 67 "polinom.y"
+       {
+        initialize_array((yyval.array));
+        (yyval.array)[1][0] = 1;
+    }
+#line 1240 "y.tab.c"
+    break;
+
+  case 16: /* monom: VARY  */
+#line 71 "polinom.y"
+       {
+        initialize_array((yyval.array));
+        (yyval.array)[0][1] = 1;
+    }
+#line 1249 "y.tab.c"
+    break;
+
+  case 17: /* monom: VARX '^' NUMBER  */
+#line 75 "polinom.y"
+                  {
+        initialize_array((yyval.array));
+        (yyval.array)[(yyvsp[0].ival)][0] = 1;
+    }
+#line 1258 "y.tab.c"
+    break;
+
+  case 18: /* monom: VARY '^' NUMBER  */
+#line 79 "polinom.y"
+                  {
+        initialize_array((yyval.array));
+        (yyval.array)[0][(yyvsp[0].ival)] = 1;
+    }
+#line 1267 "y.tab.c"
     break;
 
 
-#line 1201 "y.tab.c"
+#line 1271 "y.tab.c"
 
       default: break;
     }
@@ -1390,54 +1460,145 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 46 "polinom.y"
+#line 85 "polinom.y"
 
 
-void initialize_array(int arr[10]) {
+void initialize_array(int arr[10][10]) {
     for (int i = 0; i < 10; i++) {
-        arr[i] = 0;
+        for (int j = 0; j < 10; j++) {
+            arr[i][j] = 0;
+        }
     }
 }
 
-void add_arrays(int arr1[10], int arr2[10], int result[10]) {
+void add_arrays(int arr1[10][10], int arr2[10][10], int result[10][10]) {
     for (int i = 0; i < 10; i++) {
-        result[i] = arr1[i] + arr2[i];
+        for (int j = 0; j < 10; j++) {
+            result[i][j] = arr1[i][j] + arr2[i][j];
+        }
     }
 }
 
-void subtract_arrays(int arr1[10], int arr2[10], int result[10]) {
+void subtract_arrays(int arr1[10][10], int arr2[10][10], int result[10][10]) {
     for (int i = 0; i < 10; i++) {
-        result[i] = arr1[i] - arr2[i];
+        for (int j = 0; j < 10; j++) {
+            result[i][j] = arr1[i][j] - arr2[i][j];
+        }
     }
 }
 
-void print_array(int arr[10]) {
-    for(int i=0; i<10; i++) {
-        if(arr[i] != 0) {
-            if(i == 0) {
-                printf("%d", arr[i]);
-            } else {
-                printf(" + %dx^%d", arr[i], i);
+void print_array(int arr[10][10]) {
+    int printed = 0;
+
+    for(int i = 0; i < 10; i++) {
+        for(int j = 0; j < 10; j++) {
+            if(arr[i][j] != 0) {
+                if(printed == 0) {
+                    if(arr[i][j] < 0) {
+                        printf("-");
+                    }
+                } else {
+                    if(arr[i][j] < 0) {
+                        printf(" - ");
+                    } else {
+                        printf(" + ");
+                    }
+                }
+
+                int coef = arr[i][j];
+
+                if(coef < 0) {
+                    coef = -coef;
+                }
+
+                if(i == 0 && j == 0) {
+                    printf("%d", coef);
+                } else {
+                    if(coef != 1) {
+                        printf("%d*", coef);
+                    }
+
+                    if(i != 0) {
+                        printf("X");
+
+                        if(i != 1) {
+                            printf("^%d", i);
+                        }
+                    }
+
+                    if(i != 0 && j != 0) {
+                        printf("*");
+                    }
+
+                    if(j != 0) {
+                        printf("Y");
+
+                        if(j != 1) {
+                            printf("^%d", j);
+                        }
+                    }
+                }
+
+                printed = 1;
             }
         }
     }
+
+    if(printed == 0) {
+        printf("0");
+    }
+
     printf("\n");
 }
 
-void yyerror(const char *s) {
-    fprintf(stderr, "Error: %s\n", s);
-}
+void multiply_arrays(int arr1[10][10], int arr2[10][10], int result[10][10]) {
+    int temp[10][10] = {0};
 
-void multiply_arrays(int arr1[10], int arr2[10], int result[10]) {
-    int temp[10] = {0};
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 10; j++) {
-            if (i + j < 10) {
-                temp[i + j] += arr1[i] * arr2[j];
+    for (int i1 = 0; i1 < 10; i1++) {
+        for (int j1 = 0; j1 < 10; j1++) {
+            for (int i2 = 0; i2 < 10; i2++) {
+                for (int j2 = 0; j2 < 10; j2++) {
+                    if (i1 + i2 < 10 && j1 + j2 < 10) {
+                        temp[i1 + i2][j1 + j2] += arr1[i1][j1] * arr2[i2][j2];
+                    }
+                }
             }
         }
     }
+
     for (int i = 0; i < 10; i++) {
-        result[i] = temp[i];
+        for (int j = 0; j < 10; j++) {
+            result[i][j] = temp[i][j];
+        }
     }
 }
+
+void derive_array(int arr[10][10], int result[10][10]) {
+    initialize_array(result);
+
+    // derivative with respect to Y
+    for (int i = 0; i < 10; i++) {
+        for (int j = 1; j < 10; j++) {
+            result[i][j - 1] = arr[i][j] * j;
+        }
+    }
+}
+
+int compute_value(int arr[10][10], int x) {
+    int result = 0;
+    int power_x = 1;
+
+    for (int i = 0; i < 10; i++) {
+        int power_y = 1;
+
+        for (int j = 0; j < 10; j++) {
+            result += arr[i][j] * power_x * power_y;
+            power_y *= x;
+        }
+
+        power_x *= x;
+    }
+
+    return result;
+}
+
